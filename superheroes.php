@@ -63,10 +63,31 @@ $superheroes = [
   ], 
 ];
 
-?>
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $foundSuperhero = NULL;
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+    if (!isset($_GET['query']) or empty($_GET['query'])) {
+        echo "<ul>";
+        foreach ($superheroes as $superhero){
+           echo "<li>". $superhero["alias"] . "</li>";
+        }
+        echo "</ul>";
+
+    } else {
+        foreach($superheroes as $superhero){
+            if(strtoupper($_GET['query']) === strtoupper($superhero["name"]) or strtoupper($_GET['query']) === strtoupper($superhero["alias"])) {
+                $foundSuperhero = $superhero;
+                break;
+            } 
+        }
+
+        if(!isset($foundSuperhero)) {
+            echo "<p>Superhero not found</p>";
+        } else {
+            echo "<h3>" . $foundSuperhero["alias"] . "</h3><h4> A.K.A. " . $foundSuperhero["name"] . "</h4><br>" . $foundSuperhero["biography"]; 
+        }
+       
+    }
+} 
+        
+?>

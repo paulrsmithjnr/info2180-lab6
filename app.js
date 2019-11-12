@@ -5,8 +5,10 @@ window.onload = function() {
   searchButton.onclick = makeRequest;
 
   function makeRequest() {
+    event.preventDefault();
     httpRequest = new XMLHttpRequest();
-    var url = "superheroes.php";
+    var userInput = document.getElementById("inputField").value;
+    var url = "superheroes.php" + "?query=" + userInput;
 
     httpRequest.onreadystatechange = getResults;
     httpRequest.open('GET', url);
@@ -16,7 +18,9 @@ window.onload = function() {
   function getResults() {
     if(httpRequest.readyState === XMLHttpRequest.DONE) {
       if(httpRequest.status === 200) {
-        alert(httpRequest.responseText);
+        var response = httpRequest.responseText;
+        var resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = response;
       } else {
         alert("Something went wrong with the request! Request Status = " + httpRequest.status);
       }
